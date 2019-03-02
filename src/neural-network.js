@@ -67,6 +67,7 @@ export default class NeuralNetwork {
     this.inputLookupLength = null;
     this.outputLookup = null;
     this.outputLookupLength = null;
+    this.stopped = false;
   }
 
   /**
@@ -404,7 +405,7 @@ export default class NeuralNetwork {
    * @param endTime
    */
   trainingTick(data, status, endTime) {
-    if (status.iterations >= this.trainOpts.iterations || status.error <= this.trainOpts.errorThresh || Date.now() >= endTime) {
+    if (status.iterations >= this.trainOpts.iterations || status.error <= this.trainOpts.errorThresh || Date.now() >= endTime || this.stopped) {
       return false;
     }
 
@@ -1057,6 +1058,10 @@ export default class NeuralNetwork {
     }
 
     return new Function('input', `${ needsVar ? 'var v;' : '' }return ${result};`);
+  }
+  
+  stop() {
+    this.stopped = true;
   }
 }
 
